@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Tita Rosario - Menú</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Phosphor Icons for iOS-like icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #F2F2F7; /* iOS standard background */
+            overscroll-behavior-y: none; /* Prevent pull-to-refresh on mobile */
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* iOS-like safe area paddings */
+        .safe-area-pt { padding-top: env(safe-area-inset-top, 20px); }
+        .safe-area-pb { padding-bottom: env(safe-area-inset-bottom, 20px); }
+
+        /* Animations */
+        @keyframes fadeOut {
+            from { opacity: 1; visibility: visible; }
+            to { opacity: 0; visibility: hidden; }
+        }
+        
+        @keyframes slideInUp {
+            from { transform: translateY(100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0.95); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .animate-fade-out {
+            animation: fadeOut 0.5s ease-out forwards;
+        }
+
+        .animate-slide-up {
+            animation: slideInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .animate-scale-in {
+            animation: scaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        /* Custom Scrollbar for a cleaner look */
+        ::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
+        }
+
+        /* Glassmorphism effects */
+        .glass-header {
+            background: rgba(242, 242, 247, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 0.5px solid rgba(60, 60, 67, 0.18);
+        }
+
+        .glass-bottom-nav {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 0.5px solid rgba(60, 60, 67, 0.18);
+        }
+
+        /* iOS List Styles */
+        .ios-list-container {
+            background-color: #FFFFFF;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .ios-list-item {
+            position: relative;
+            background-color: #FFFFFF;
+            transition: background-color 0.2s;
+        }
+        
+        .ios-list-item:active {
+            background-color: #E5E5EA;
+        }
+
+        .ios-list-item:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 16px; /* Offset for image/icon */
+            right: 0;
+            height: 0.5px;
+            background-color: rgba(60, 60, 67, 0.18); /* iOS separator color */
+        }
+
+        /* Active Category Style */
+        .category-btn {
+            transition: all 0.2s ease;
+        }
+        .category-btn.active {
+            background-color: #5D2A2B; /* Tita Rosario Brand Color */
+            color: white;
+            font-weight: 600;
+        }
+        
+        /* Tita Rosario Colors */
+        .text-brand { color: #5D2A2B; }
+        .bg-brand { background-color: #5D2A2B; }
+        
+        /* Modals */
+        .modal-overlay {
+            background: rgba(0, 0, 0, 0.4);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
+        .modal-content {
+            transform: translateY(100%);
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .modal-content.active {
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="text-[#1C1C1E] h-screen w-full overflow-hidden flex justify-center bg-gray-900">
+
+    <!-- Mobile Device Container for desktop preview -->
+    <div class="relative w-full h-full sm:w-[390px] sm:h-[844px] sm:my-auto sm:rounded-[40px] sm:border-[8px] sm:border-black sm:shadow-2xl overflow-hidden bg-[#F2F2F7]">
+        
+        <!-- Splash Screen -->
+        <div id="splashScreen" class="absolute inset-0 z-50 bg-[#F4E8D8] flex flex-col items-center justify-center transition-opacity duration-500">
+            <!-- Simulated Logo -->
+            <div class="w-48 h-48 flex flex-col items-center justify-center animate-scale-in">
+                <div class="w-32 h-32 bg-[#5D2A2B] rounded-lg border-2 border-white flex items-center justify-center shadow-lg relative p-2">
+                     <!-- Abstract Cacao/Leaves representation based on PDF -->
+                    <div class="grid grid-cols-2 gap-1 w-full h-full p-2 border border-[#D5B085]">
+                        <div class="border border-[#D5B085] rounded-tl-full rounded-br-full transform -rotate-45 relative">
+                             <div class="absolute inset-2 border-t border-l border-[#D5B085] rounded-tl-full"></div>
+                        </div>
+                        <div class="border border-[#D5B085] rounded-tr-full rounded-bl-full transform rotate-45 relative">
+                             <div class="absolute inset-2 border-t border-r border-[#D5B085] rounded-tr-full"></div>
+                        </div>
+                        <div class="border border-[#D5B085] rounded-bl-full rounded-tr-full transform rotate-45 relative">
+                            <div class="absolute inset-2 border-b border-l border-[#D5B085] rounded-bl-full"></div>
+                        </div>
+                        <div class="border border-[#D5B085] rounded-br-full rounded-tl-full transform -rotate-45 relative">
+                            <div class="absolute inset-2 border-b border-r border-[#D5B085] rounded-br-full"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4 text-center">
+                    <p class="text-[#D5B085] tracking-widest text-sm uppercase">T I T A</p>
+                    <h1 class="text-[#5D2A2B] font-bold text-4xl mt-1 tracking-tight" style="font-family: serif;">ROSARIO</h1>
+                </div>
+            </div>
+            
+            <div class="absolute bottom-12 mt-auto">
+                <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-[#5D2A2B]"></div>
+            </div>
+        </div>
+
+        <!-- Main App Content -->
+        <div id="mainApp" class="w-full h-full flex flex-col opacity-0 invisible">
+            
+            <!-- Header (Glassmorphism) -->
+            <header class="glass-header z-40 px-4 pt-12 pb-2 safe-area-pt absolute top-0 w-full flex justify-between items-center">
+                <div class="flex flex-col">
+                    <span class="text-xs text-gray-500 uppercase tracking-wider font-semibold">Tita Rosario</span>
+                    <h2 class="text-2xl font-bold text-gray-900 tracking-tight" id="headerTitle">Menú</h2>
+                </div>
+                <button onclick="showSearch()" class="p-2 bg-gray-200/50 rounded-full text-brand">
+                    <i class="ph ph-magnifying-glass text-xl"></i>
+                </button>
+            </header>
+
+            <!-- Scrollable Content Area -->
+            <main class="flex-1 overflow-y-auto pb-24 pt-[90px] px-4" id="mainScroll">
+                
+                <!-- Welcome Banner -->
+                <div class="bg-[#F4E8D8] rounded-2xl p-5 mb-6 shadow-sm relative overflow-hidden mt-2">
+                    <div class="absolute top-0 right-0 opacity-10">
+                        <i class="ph-fill ph-coffee text-8xl transform rotate-12 -mt-4 -mr-4"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-[#5D2A2B] mb-1">¡Hola!</h3>
+                    <p class="text-sm text-[#5D2A2B]/80">¿Qué te gustaría disfrutar hoy?</p>
+                </div>
+
+                <!-- Categories Selector -->
+                <div class="mb-2 sticky top-[80px] z-30 -mx-4 px-4 py-2 bg-[#F2F2F7]">
+                    <div class="flex overflow-x-auto space-x-2 pb-2 no-scrollbar" id="categoryContainer">
+                        <!-- Categories injected here -->
+                    </div>
+                </div>
+
+                <!-- List Items Container -->
+                <div class="ios-list-container mb-8" id="menuItemsContainer">
+                    <!-- Items injected here based on category -->
+                </div>
+                
+                <!-- Safe area padding for bottom -->
+                <div class="h-6"></div>
+            </main>
+
+            <!-- Bottom Tab Navigation -->
+            <nav class="glass-bottom-nav absolute bottom-0 w-full z-40 pb-6 pt-2 safe-area-pb flex justify-around items-center">
+                <button onclick="switchTab('menu')" class="flex flex-col items-center p-2 text-brand" id="tab-menu">
+                    <i class="ph-fill ph-book-open text-2xl mb-1"></i>
+                    <span class="text-[10px] font-medium">Menú</span>
+                </button>
+                <button onclick="switchTab('favorites')" class="flex flex-col items-center p-2 text-gray-400" id="tab-favorites">
+                    <i class="ph ph-heart text-2xl mb-1"></i>
+                    <span class="text-[10px] font-medium">Favoritos</span>
+                </button>
+                <button onclick="switchTab('info')" class="flex flex-col items-center p-2 text-gray-400" id="tab-info">
+                    <i class="ph ph-info text-2xl mb-1"></i>
+                    <span class="text-[10px] font-medium">Info</span>
+                </button>
+            </nav>
+        </div>
+
+        <!-- Item Detail Modal (iOS Action Sheet style) -->
+        <div id="detailModalOverlay" class="absolute inset-0 z-50 modal-overlay" onclick="closeModal()"></div>
+        <div id="detailModal" class="absolute bottom-0 left-0 right-0 z-50 bg-[#F2F2F7] rounded-t-3xl modal-content max-h-[85vh] flex flex-col shadow-[0_-10px_40px_rgba(0,0,0,0.1)]">
+            <!-- Modal Handle -->
+            <div class="w-full flex justify-center pt-3 pb-2 bg-white rounded-t-3xl cursor-pointer" onclick="closeModal()">
+                <div class="w-12 h-1.5 bg-gray-300 rounded-full"></div>
+            </div>
+            
+            <div class="bg-white flex-1 overflow-y-auto px-5 pb-8">
+                <div class="flex justify-between items-start pt-2">
+                    <h3 id="modalTitle" class="text-2xl font-bold text-gray-900 max-w-[75%] leading-tight"></h3>
+                    <button class="bg-gray-100 p-2 rounded-full text-gray-500" onclick="toggleFavoriteModal()">
+                        <i id="modalHeart" class="ph ph-heart text-xl"></i>
+                    </button>
+                </div>
+                
+                <p id="modalCategory" class="text-sm font-medium text-brand mt-1"></p>
+                
+                <div class="mt-6 flex justify-between items-end border-b border-gray-100 pb-4">
+                    <span class="text-gray-500 text-sm">Precio</span>
+                    <span id="modalPrice" class="text-2xl font-bold text-gray-900"></span>
+                </div>
+                
+                <div id="modalDescriptionContainer" class="mt-4 hidden">
+                    <h4 class="text-sm font-semibold text-gray-900 mb-2">Detalles</h4>
+                    <p id="modalDescription" class="text-gray-600 text-sm leading-relaxed"></p>
+                </div>
+
+                <button class="w-full bg-[#5D2A2B] text-white font-semibold rounded-xl py-4 mt-8 active:scale-[0.98] transition-transform" onclick="closeModal()">
+                    Volver al Menú
+                </button>
+            </div>
+        </div>
+
+        <!-- Search Full Screen View -->
+        <div id="searchView" class="absolute inset-0 z-50 bg-[#F2F2F7] transform translate-y-full transition-transform duration-300 flex flex-col">
+            <div class="glass-header pt-12 pb-3 px-4 safe-area-pt flex items-center gap-3">
+                <div class="relative flex-1">
+                    <i class="ph ph-magnifying-glass absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                    <input type="text" id="searchInput" placeholder="Buscar plato o bebida..." class="w-full bg-gray-200/60 rounded-xl py-2 pl-10 pr-4 text-[17px] focus:outline-none focus:ring-2 focus:ring-brand/50">
+                    <button id="clearSearchBtn" onclick="clearSearch()" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hidden">
+                        <i class="ph-fill ph-x-circle"></i>
+                    </button>
+                </div>
+                <button onclick="hideSearch()" class="text-brand font-medium text-[17px]">Cancelar</button>
+            </div>
+            
+            <div class="flex-1 overflow-y-auto p-4" id="searchResults">
+                <!-- Search results injected here -->
+                <div class="text-center text-gray-500 mt-10" id="searchEmptyState">
+                    <i class="ph ph-magnifying-glass text-4xl mb-2 opacity-50"></i>
+                    <p>Empieza a escribir para buscar</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Data Structure
+        const menuData = [
+            { id: 'c1', category: "Cafés calientes", items: [
+                { id: 'i1', name: "Espresso", price: "$4.500", desc: "", icon: "coffee" },
+                { id: 'i2', name: "Americano", price: "$4.500", desc: "", icon: "coffee" },
+                { id: 'i3', name: "Capuchino", price: "$6.500", desc: "", icon: "coffee" },
+                { id: 'i4', name: "Latte", price: "$6.500", desc: "", icon: "coffee" },
+                { id: 'i5', name: "Mocachino", price: "$8.500", desc: "", icon: "coffee" },
+                { id: 'i6', name: "Capuchai", price: "$10.500", desc: "", icon: "coffee" }
+            ]},
+            { id: 'c2', category: "Bebidas refrescantes", items: [
+                { id: 'i7', name: "Jugos naturales en agua", price: "$8.000", desc: "Mora, maracuyá, frutos amarillos, frutos rojos, fresa, guanábana, uva, mango, tamarindo.", icon: "drop" },
+                { id: 'i8', name: "Jugos (Agua) - Açaí", price: "$18.000", desc: "", icon: "drop" },
+                { id: 'i9', name: "Jugos naturales en leche", price: "$10.000", desc: "Mora, maracuyá, frutos amarillos, frutos rojos, fresa, guanábana, uva, mango, tamarindo.", icon: "drop" },
+                { id: 'i10', name: "Jugos (Leche) - Açaí", price: "$18.000", desc: "", icon: "drop" },
+                { id: 'i11', name: "Limonada", price: "$10.000", desc: "Coco, yerbabuena con menta, cereza.", icon: "drop" },
+                { id: 'i12', name: "Sodas saborizadas", price: "$12.000", desc: "", icon: "martini" }
+            ]},
+            { id: 'c3', category: "Cafés fríos", items: [
+                { id: 'i13', name: "Latte frío", price: "$9.000", desc: "", icon: "brandy" },
+                { id: 'i14', name: "Frapuchino", price: "$14.000", desc: "", icon: "brandy" },
+                { id: 'i15', name: "Cold brew", price: "$10.000", desc: "", icon: "brandy" }
+            ]},
+            { id: 'c4', category: "Infusiones y Tés", items: [
+                { id: 'i16', name: "Matcha", price: "$9.000", desc: "", icon: "tea-bag" },
+                { id: 'i17', name: "Golden Milk", price: "$11.000", desc: "", icon: "coffee" },
+                { id: 'i18', name: "Chai", price: "$10.000", desc: "", icon: "tea-bag" },
+                { id: 'i19', name: "Aromáticas", price: "$10.000", desc: "De frutos deshidratados.", icon: "flower-lotus" },
+                { id: 'i20', name: "Aromática en bolsa", price: "$10.000", desc: "", icon: "tea-bag" },
+                { id: 'i25', name: "Matcha polen frío", price: "$9.000", desc: "", icon: "brandy" },
+                { id: 'i26', name: "Frapuchai", price: "$14.000", desc: "", icon: "brandy" }
+            ]},
+            { id: 'c5', category: "Chocolate", items: [
+                { id: 'i21', name: "Chocolate", price: "$8.000", desc: "En agua o leche.", icon: "coffee" },
+                { id: 'i22', name: "Milo", price: "$9.000", desc: "", icon: "coffee" },
+                { id: 'i23', name: "Milo Rosario helado", price: "$11.000", desc: "", icon: "brandy" },
+                { id: 'i24', name: "Milo Rosario granizado", price: "$10.000", desc: "", icon: "brandy" }
+            ]},
+            { id: 'c6', category: "Hojaldrados", items: [
+                { id: 'i27', name: "Pasteles", price: "$6.500", desc: "Carne, pollo con champiñones, queso con espinaca y tocineta, jamón y queso, hawaiano.", icon: "croissant" },
+                { id: 'i28', name: "Palo de queso", price: "$5.500", desc: "", icon: "baguette" }
+            ]},
+            { id: 'c7', category: "Pastelería", items: [
+                { id: 'i29', name: "Red velvet", price: "$10.000", desc: "Porción", icon: "cake" },
+                { id: 'i30', name: "Chocolate", price: "$10.000", desc: "Porción", icon: "cake" },
+                { id: 'i31', name: "Banano con amapola", price: "$10.000", desc: "Porción", icon: "cake" },
+                { id: 'i32', name: "Zanahoria", price: "$11.000", desc: "Porción", icon: "cake" },
+                { id: 'i33', name: "Limón", price: "$7.500", desc: "Porción", icon: "cake" },
+                { id: 'i34', name: "Torta envinada", price: "$6.000", desc: "Porción", icon: "cake" },
+                { id: 'i35', name: "Brownie", price: "$5.000", desc: "", icon: "cookie" },
+                { id: 'i36', name: "Galleta de Avena", price: "$4.500", desc: "", icon: "cookie" },
+                { id: 'i37', name: "Galleta Chips choco", price: "$4.500", desc: "", icon: "cookie" },
+                { id: 'i38', name: "Muffin Grande", price: "$4.500", desc: "", icon: "muffin" },
+                { id: 'i39', name: "Muffin Mini", price: "$4.200", desc: "", icon: "muffin" }
+            ]},
+            { id: 'c8', category: "Otros / Tienda", items: [
+                { id: 'i40', name: "Miel de abejas 235 gr", price: "$16.000", desc: "", icon: "hexagon" },
+                { id: 'i41', name: "Miel de abejas 475 gr", price: "$22.000", desc: "", icon: "hexagon" },
+                { id: 'i42', name: "Polen 220 gr", price: "$18.000", desc: "", icon: "leaf" },
+                { id: 'i43', name: "Polen 350 gr", price: "$22.000", desc: "", icon: "leaf" },
+                { id: 'i44', name: "Polen 450 gr", price: "$25.000", desc: "", icon: "leaf" },
+                { id: 'i45', name: "Propóleo (30 ml)", price: "$30.000", desc: "Extracto", icon: "drop" },
+                { id: 'i46', name: "Aceite de coco (235 gr)", price: "$25.000", desc: "", icon: "drop" },
+                { id: 'i47', name: "Viche botella (750 ml)", price: "$40.000", desc: "", icon: "wine" },
+                { id: 'i48', name: "Viche media (375 ml)", price: "$22.000", desc: "", icon: "wine" },
+                { id: 'i49', name: "Viche cuarto (175 ml)", price: "$12.000", desc: "", icon: "wine" }
+            ]},
+            { id: 'c9', category: "Chocolatería", items: [
+                { id: 'i50', name: "Bombones rellenos", price: "$4.500", desc: "", icon: "cookie" },
+                { id: 'i51', name: "Chocolate de mesa 125g", price: "$11.000", desc: "", icon: "coffee" },
+                { id: 'i52', name: "Chocolate de mesa 250g", price: "$25.000", desc: "", icon: "coffee" },
+                { id: 'i53', name: "Barra 60%", price: "$10.000", desc: "Con nibs y naranja", icon: "square" },
+                { id: 'i54', name: "Barra 70%", price: "$10.000", desc: "Con café molido", icon: "square" },
+                { id: 'i55', name: "Barra 70% natural", price: "$10.000", desc: "", icon: "square" },
+                { id: 'i56', name: "Barra 80% sin azúcar", price: "$12.000", desc: "", icon: "square" },
+                { id: 'i57', name: "Barra 100%", price: "$12.000", desc: "", icon: "square" },
+                { id: 'i58', name: "Musilago de cacao", price: "$25.000", desc: "Tamaño por 500 gr", icon: "drop" }
+            ]}
+        ];
+
+        let activeCategory = menuData[0].id;
+        let favorites = JSON.parse(localStorage.getItem('tita_favorites')) || [];
+        let currentItem = null;
+
+        window.addEventListener('DOMContentLoaded', () => {
+            // Simulate App Loading
+            setTimeout(() => {
+                const splash = document.getElementById('splashScreen');
+                const app = document.getElementById('mainApp');
+                
+                splash.classList.add('animate-fade-out');
+                
+                setTimeout(() => {
+                    splash.style.display = 'none';
+                    app.classList.remove('opacity-0', 'invisible');
+                    app.classList.add('animate-fade-in');
+                    
+                    initApp();
+                }, 500);
+            }, 1500); // 1.5s splash screen
+
+            setupSearch();
+        });
+
+        function initApp() {
+            renderCategories();
+            renderMenuItems(activeCategory);
+        }
+
+        function renderCategories() {
+            const container = document.getElementById('categoryContainer');
+            container.innerHTML = '';
+
+            menuData.forEach(cat => {
+                const btn = document.createElement('button');
+                btn.className = `category-btn whitespace-nowrap px-4 py-2 rounded-full text-sm font-medium border border-gray-200 ${cat.id === activeCategory ? 'active' : 'bg-white text-gray-700'}`;
+                btn.innerText = cat.category;
+                btn.onclick = () => selectCategory(cat.id, btn);
+                container.appendChild(btn);
+            });
+        }
+
+        function selectCategory(id, btnElement) {
+            activeCategory = id;
+            
+            // Update active styling
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('active', 'bg-brand', 'text-white');
+                btn.classList.add('bg-white', 'text-gray-700');
+            });
+            btnElement.classList.add('active');
+            btnElement.classList.remove('bg-white', 'text-gray-700');
+
+            // Scroll category button into view smoothly
+            btnElement.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+
+            // Animate list update
+            const container = document.getElementById('menuItemsContainer');
+            container.style.opacity = '0.5';
+            setTimeout(() => {
+                renderMenuItems(id);
+                container.style.opacity = '1';
+                // Scroll main area to top of list
+                document.getElementById('mainScroll').scrollTo({ top: 120, behavior: 'smooth' });
+            }, 150);
+        }
+
+        function renderMenuItems(categoryId) {
+            const container = document.getElementById('menuItemsContainer');
+            container.innerHTML = '';
+            
+            const categoryData = menuData.find(c => c.id === categoryId);
+            
+            if (!categoryData) return;
+
+            categoryData.items.forEach(item => {
+                const isFav = favorites.includes(item.id);
+                
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'ios-list-item flex items-center p-4 cursor-pointer';
+                itemDiv.onclick = () => openItemDetail(item, categoryData.category);
+                
+                itemDiv.innerHTML = `
+                    <div class="w-10 h-10 rounded-lg bg-[#F4E8D8] text-brand flex items-center justify-center mr-4 shrink-0">
+                        <i class="ph ph-${item.icon || 'star'} text-xl"></i>
+                    </div>
+                    <div class="flex-1 min-w-0 pr-4">
+                        <div class="flex justify-between items-center mb-1">
+                            <h4 class="text-[17px] font-semibold text-gray-900 truncate">${item.name}</h4>
+                            <span class="text-[17px] text-gray-900 ml-2 whitespace-nowrap">${item.price}</span>
+                        </div>
+                        ${item.desc ? `<p class="text-[13px] text-gray-500 line-clamp-1">${item.desc}</p>` : ''}
+                    </div>
+                    <div class="text-gray-300 shrink-0">
+                        <i class="ph ph-caret-right"></i>
+                    </div>
+                `;
+                container.appendChild(itemDiv);
+            });
+        }
+
+        function openItemDetail(item, categoryName) {
+            currentItem = item;
+            
+            document.getElementById('modalTitle').innerText = item.name;
+            document.getElementById('modalCategory').innerText = categoryName;
+            document.getElementById('modalPrice').innerText = item.price;
+            
+            const descContainer = document.getElementById('modalDescriptionContainer');
+            const descEl = document.getElementById('modalDescription');
+            
+            if (item.desc) {
+                descEl.innerText = item.desc;
+                descContainer.classList.remove('hidden');
+            } else {
+                descContainer.classList.add('hidden');
+            }
+
+            updateModalHeart();
+
+            const overlay = document.getElementById('detailModalOverlay');
+            const modal = document.getElementById('detailModal');
+            
+            overlay.classList.add('active');
+            modal.classList.add('active');
+        }
+
+        function closeModal() {
+            const overlay = document.getElementById('detailModalOverlay');
+            const modal = document.getElementById('detailModal');
+            
+            overlay.classList.remove('active');
+            modal.classList.remove('active');
+            currentItem = null;
+        }
+
+        function toggleFavoriteModal() {
+            if (!currentItem) return;
+            
+            const index = favorites.indexOf(currentItem.id);
+            if (index > -1) {
+                favorites.splice(index, 1);
+            } else {
+                favorites.push(currentItem.id);
+            }
+            
+            localStorage.setItem('tita_favorites', JSON.stringify(favorites));
+            updateModalHeart();
+            
+            // If we are on favorites tab, refresh it
+            if(document.getElementById('headerTitle').innerText === 'Favoritos') {
+                 renderFavorites();
+            }
+        }
+
+        function updateModalHeart() {
+            if (!currentItem) return;
+            const heart = document.getElementById('modalHeart');
+            if (favorites.includes(currentItem.id)) {
+                heart.classList.remove('ph');
+                heart.classList.add('ph-fill', 'text-red-500');
+            } else {
+                heart.classList.remove('ph-fill', 'text-red-500');
+                heart.classList.add('ph');
+            }
+        }
+
+        function switchTab(tabId) {
+            // Update UI Icons
+            const tabs = ['menu', 'favorites', 'info'];
+            tabs.forEach(t => {
+                const btn = document.getElementById(`tab-${t}`);
+                const icon = btn.querySelector('i');
+                if(t === tabId) {
+                    btn.classList.replace('text-gray-400', 'text-brand');
+                    icon.classList.remove('ph');
+                    icon.classList.add('ph-fill');
+                } else {
+                    btn.classList.replace('text-brand', 'text-gray-400');
+                    icon.classList.remove('ph-fill');
+                    icon.classList.add('ph');
+                }
+            });
+
+            const headerTitle = document.getElementById('headerTitle');
+            const mainScroll = document.getElementById('mainScroll');
+            const categoryContainer = document.getElementById('categoryContainer').parentElement;
+
+            if (tabId === 'menu') {
+                headerTitle.innerText = 'Menú';
+                categoryContainer.style.display = 'block';
+                renderMenuItems(activeCategory);
+            } else if (tabId === 'favorites') {
+                headerTitle.innerText = 'Favoritos';
+                categoryContainer.style.display = 'none';
+                renderFavorites();
+            } else if (tabId === 'info') {
+                headerTitle.innerText = 'Info';
+                categoryContainer.style.display = 'none';
+                renderInfo();
+            }
+            
+            mainScroll.scrollTo(0,0);
+        }
+
+        function renderFavorites() {
+            const container = document.getElementById('menuItemsContainer');
+            container.innerHTML = '';
+            
+            if (favorites.length === 0) {
+                container.innerHTML = `
+                    <div class="p-10 flex flex-col items-center justify-center text-center">
+                        <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                            <i class="ph-fill ph-heart text-3xl text-gray-300"></i>
+                        </div>
+                        <h4 class="text-lg font-medium text-gray-900 mb-1">Sin favoritos aún</h4>
+                        <p class="text-sm text-gray-500">Toca el corazón en tus platos preferidos para guardarlos aquí.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let allItems = [];
+            menuData.forEach(c => allItems = allItems.concat(c.items.map(i => ({...i, catName: c.category}))));
+            
+            const favItems = allItems.filter(i => favorites.includes(i.id));
+
+            favItems.forEach(item => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'ios-list-item flex items-center p-4 cursor-pointer';
+                itemDiv.onclick = () => openItemDetail(item, item.catName);
+                
+                itemDiv.innerHTML = `
+                    <div class="w-10 h-10 rounded-lg bg-[#F4E8D8] text-brand flex items-center justify-center mr-4 shrink-0">
+                        <i class="ph ph-${item.icon || 'star'} text-xl"></i>
+                    </div>
+                    <div class="flex-1 min-w-0 pr-4">
+                        <div class="flex justify-between items-center mb-1">
+                            <h4 class="text-[17px] font-semibold text-gray-900 truncate">${item.name}</h4>
+                            <span class="text-[17px] text-gray-900 ml-2 whitespace-nowrap">${item.price}</span>
+                        </div>
+                        <p class="text-[12px] font-medium text-brand mb-1">${item.catName}</p>
+                        ${item.desc ? `<p class="text-[13px] text-gray-500 line-clamp-1">${item.desc}</p>` : ''}
+                    </div>
+                `;
+                container.appendChild(itemDiv);
+            });
+        }
+        
+        function renderInfo() {
+             const container = document.getElementById('menuItemsContainer');
+             container.innerHTML = `
+                <div class="p-6">
+                    <div class="flex justify-center mb-6">
+                        <div class="w-24 h-24 bg-[#5D2A2B] rounded-xl flex items-center justify-center">
+                            <div class="grid grid-cols-2 gap-0.5 w-16 h-16 p-1">
+                                <div class="border border-[#D5B085] rounded-tl-full rounded-br-full"></div>
+                                <div class="border border-[#D5B085] rounded-tr-full rounded-bl-full"></div>
+                                <div class="border border-[#D5B085] rounded-bl-full rounded-tr-full"></div>
+                                <div class="border border-[#D5B085] rounded-br-full rounded-tl-full"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <h3 class="text-center text-xl font-bold text-gray-900 mb-2">Tita Rosario</h3>
+                    <p class="text-center text-gray-500 text-sm mb-8">Cafetería & Chocolatería</p>
+                    
+                    <div class="bg-gray-50 rounded-xl p-4 mb-4 flex items-center">
+                        <i class="ph ph-clock text-xl text-brand mr-4"></i>
+                        <div>
+                            <p class="text-sm font-medium">Horario</p>
+                            <p class="text-xs text-gray-500">Lunes a Domingo</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-50 rounded-xl p-4 flex items-center">
+                        <i class="ph ph-map-pin text-xl text-brand mr-4"></i>
+                        <div>
+                            <p class="text-sm font-medium">Ubicación</p>
+                            <p class="text-xs text-gray-500">Visítanos y disfruta.</p>
+                        </div>
+                    </div>
+                </div>
+             `;
+        }
+
+        function setupSearch() {
+            const input = document.getElementById('searchInput');
+            const clearBtn = document.getElementById('clearSearchBtn');
+            
+            input.addEventListener('input', (e) => {
+                const val = e.target.value;
+                if(val.length > 0) {
+                    clearBtn.classList.remove('hidden');
+                    performSearch(val);
+                } else {
+                    clearBtn.classList.add('hidden');
+                    document.getElementById('searchResults').innerHTML = '';
+                    document.getElementById('searchEmptyState').style.display = 'block';
+                }
+            });
+        }
+
+        function showSearch() {
+            const searchView = document.getElementById('searchView');
+            searchView.classList.remove('translate-y-full');
+            setTimeout(() => {
+                document.getElementById('searchInput').focus();
+            }, 300);
+        }
+
+        function hideSearch() {
+            const searchView = document.getElementById('searchView');
+            searchView.classList.add('translate-y-full');
+            document.getElementById('searchInput').blur();
+        }
+
+        function clearSearch() {
+            const input = document.getElementById('searchInput');
+            input.value = '';
+            input.focus();
+            document.getElementById('clearSearchBtn').classList.add('hidden');
+            document.getElementById('searchResults').innerHTML = '';
+            document.getElementById('searchEmptyState').style.display = 'block';
+        }
+
+        function performSearch(query) {
+            query = query.toLowerCase();
+            document.getElementById('searchEmptyState').style.display = 'none';
+            const container = document.getElementById('searchResults');
+            container.innerHTML = '';
+            
+            let allItems = [];
+            menuData.forEach(c => allItems = allItems.concat(c.items.map(i => ({...i, catName: c.category}))));
+            
+            const results = allItems.filter(item => 
+                item.name.toLowerCase().includes(query) || 
+                (item.desc && item.desc.toLowerCase().includes(query)) ||
+                item.catName.toLowerCase().includes(query)
+            );
+
+            if(results.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center text-gray-500 mt-10">
+                        <i class="ph ph-smiley-sad text-4xl mb-2 opacity-50"></i>
+                        <p>No se encontraron resultados para "${query}"</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const listContainer = document.createElement('div');
+            listContainer.className = 'ios-list-container';
+
+            results.forEach(item => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'ios-list-item flex items-center p-4 cursor-pointer';
+                itemDiv.onclick = () => {
+                    hideSearch();
+                    openItemDetail(item, item.catName);
+                };
+                
+                itemDiv.innerHTML = `
+                    <div class="flex-1 min-w-0 pr-4">
+                        <div class="flex justify-between items-center mb-1">
+                            <h4 class="text-[16px] font-semibold text-gray-900 truncate">${item.name}</h4>
+                            <span class="text-[16px] text-gray-900 ml-2">${item.price}</span>
+                        </div>
+                        <p class="text-[12px] font-medium text-brand">${item.catName}</p>
+                    </div>
+                `;
+                listContainer.appendChild(itemDiv);
+            });
+            
+            container.appendChild(listContainer);
+        }
+    </script>
+</body>
+</html>
